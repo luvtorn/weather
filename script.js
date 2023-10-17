@@ -15,9 +15,6 @@ weatherForm.addEventListener("submit", (e) => {
     const weather = await data.weather.find((elem) => elem.main) // чтобы получить данные из массива обьектов (погодные условия, глянь апишку если что)
     let date = new Date().toLocaleString()
 
-    console.log(resultLink)
-    console.log(data)
-
     if (weather.main === "Clouds") {
       weatherIcon = `<div class="icon" >
             <div class="cloud2 small-cloud"></div>
@@ -82,50 +79,31 @@ weatherForm.addEventListener("submit", (e) => {
       feelsTemp: Math.trunc(data.main.feels_like - 273),
     }
 
+    let weatherInfo = `<h2 id="cityName">${city}</h2>
+    <p>${date}</p>
+    <div class="weather-text">
+      <p id="temperature">Температура: ${weatherArr.temp}&#176</p>
+      <p>Ощущается как: ${weatherArr.feelsTemp}&#176</p>
+      <p id="description">Погодные условия: ${weatherArr.isCloudly}</p> 
+      <p>Скорость ветра: ${weatherArr.wind} м/с</p>
+      ${weatherIcon}
+    </div>`
+
     switch (weatherCity.value) {
       case "Minsk":
-        weatherPlace.innerHTML = `<h2 id="cityName">${city}</h2>
-              <p>${date}</p>
-              <div class="weather-text">
-                <p id="temperature">Температура: ${weatherArr.temp}&#176</p>
-                <p>Ощущается как: ${weatherArr.feelsTemp}&#176</p>
-                <p id="description">Погодные условия: ${weatherArr.isCloudly}</p> 
-                <p>Скорость ветра: ${weatherArr.wind} м/с</p>
-                ${weatherIcon}
-              </div>` 
+        weatherPlace.innerHTML = weatherInfo
         break;
       case "Berlin":
-        weatherPlace.innerHTML = `<h2 id="cityName">${city}</h2>
-              <p>${date}</p>
-              <div class="weather-text">
-                <p id="temperature">Температура: ${weatherArr.temp}&#176</p>
-                <p>Ощущается как: ${weatherArr.feelsTemp}&#176</p>
-                <p id="description">Погодные условия: ${weatherArr.isCloudly}</p> 
-                <p>Скорость ветра: ${weatherArr.wind} м/с</p>
-                ${weatherIcon}
-              </div>`
+        weatherPlace.innerHTML = weatherInfo
         break;
       case "Warsaw":
-        weatherPlace.innerHTML = `<h2 id="cityName">${city}</h2>
-              <p>${date}</p>
-              <div class="weather-text">
-                <p id="temperature">Температура: ${weatherArr.temp}&#176</p>
-                <p>Ощущается как: ${weatherArr.feelsTemp}&#176</p>
-                <p id="description">Погодные условия: ${weatherArr.isCloudly}</p> 
-                <p>Скорость ветра: ${weatherArr.wind} м/с</p>
-                ${weatherIcon}
-              </div>`
+        weatherPlace.innerHTML = weatherInfo
         break;
       case "Trzcianka":
-        weatherPlace.innerHTML = `<h2 id="cityName">${city}</h2>
-                <p>${date}</p>
-                <div class="weather-text">
-                  <p id="temperature">Температура: ${weatherArr.temp}&#176</p>
-                  <p>Ощущается как: ${weatherArr.feelsTemp}&#176</p>
-                  <p id="description">Погодные условия: ${weatherArr.isCloudly}</p> 
-                  <p>Скорость ветра: ${weatherArr.wind} м/с</p>
-                  ${weatherIcon}
-                </div>`
+        weatherPlace.innerHTML = weatherInfo
+        break;
+      case "Bialystok":
+        weatherPlace.innerHTML = weatherInfo
         break;
     }
   }
