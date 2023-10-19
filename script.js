@@ -12,47 +12,38 @@ const icons = {
   Atmosphere: "icons/tornado.png",
   Clear: "icons/sun.png",
   Thunderstorm: "icons/thunderstorm.png",
+  Fog: "icons/fog.png",
 }
 
 async function getWeather(link, city) {
-  let weatherIcon = ``
-  const resultLink = await fetch(link)
-  const data = await resultLink.json()
-  const weather = await data.weather.find((elem) => elem.main) // чтобы получить данные из массива обьектов (погодные условия, глянь апишку если что)
-  let date = new Date().toLocaleString()
+  try {
+    const response = await fetch(link)
+    const data = await response.json()
+    const weather = await data.weather.find((elem) => elem) // я так и не понял, какой другой способ...
 
-  const weatherArr = {
-    temp: Math.trunc(data.main.temp - 273),
-    isCloudly: weather.description[0].toUpperCase() + weather.description.slice(1),
-    wind: data.wind.speed,
-    feelsTemp: Math.trunc(data.main.feels_like - 273),
-  }
+    const weatherInfo = {
+      temp: Math.trunc(data.main.temp - 273),
+      isCloudly: weather.description[0].toUpperCase() + weather.description.slice(1),
+      wind: data.wind.speed,
+      feelsTemp: Math.trunc(data.main.feels_like - 273),
+    }
 
-  weatherIcon = icons[weather.main]
-
-  let weatherInfo = `<h2 id="cityName">${city}</h2>
-  <p>${date}</p>
+    weatherPlace.innerHTML = `<h2 id="cityName">${city}</h2>
+  <p>${new Date().toLocaleString()}</p>
   <div class="weather-text">
-    <p id="temperature">Температура: ${weatherArr.temp}&#176</p>
-    <p>Ощущается как: ${weatherArr.feelsTemp}&#176</p>
-    <p id="description">Погодные условия: ${weatherArr.isCloudly}</p> 
-    <p>Скорость ветра: ${weatherArr.wind} м/с</p>
-    <img src="${weatherIcon}" alt="">
+    <p id="temperature">Температура: ${weatherInfo.temp}&#176</p>
+    <p>Ощущается как: ${weatherInfo.feelsTemp}&#176</p>
+    <p id="description">Погодные условия: ${weatherInfo.isCloudly}</p> 
+    <p>Скорость ветра: ${weatherInfo.wind} м/с</p>
+    <img src="${icons[weather.main]}" alt="">
   </div>`
-
-  switch (weatherCity.value) {
-    case "Minsk":
-    case "Berlin":
-    case "Warsaw":
-    case "Trzcianka":
-    case "Bialystok":
-      weatherPlace.innerHTML = weatherInfo
-      break;
+  } catch (e) {
+    console.error(e)
   }
 }
 
 weatherForm.addEventListener("submit", (e) => {
-  let city = weatherCity.value
+  const city = weatherCity.value
   const link = `https://api.openweathermap.org/data/2.5/weather?q=${city}&lang=ru&appid=${weatherApi}`
 
   getWeather(link, city)
